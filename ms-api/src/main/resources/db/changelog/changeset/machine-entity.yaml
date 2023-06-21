@@ -8,7 +8,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: int
+                  type: bigint
                   autoIncrement: true
                   constraints:
                     primaryKey: true
@@ -29,7 +29,15 @@ databaseChangeLog:
             columns:
               - column:
                   name: machine_id
-                  type: int
+                  type: bigint
+
+        - addColumn:
+            tableName: machine
+            columns:
+              - column:
+                  name: machine_activity_id
+                  type: varchar(10)
+                  defaultValue: INACTIVE
 
         - addForeignKeyConstraint:
             referencedTableName: machine
@@ -37,6 +45,7 @@ databaseChangeLog:
             baseTableName: sensor
             baseColumnNames: machine_id
             constraintName: machine_sensor_fk
+            deleteCascade: true
 
         - addForeignKeyConstraint:
             referencedTableName: machine_type
@@ -44,3 +53,13 @@ databaseChangeLog:
             baseTableName: machine
             baseColumnNames: type_id
             constraintName: machine_type_fk
+            deleteCascade: true
+
+        - addForeignKeyConstraint:
+            referencedTableName: machine_activity
+            referencedColumnNames: id
+            baseTableName: machine
+            baseColumnNames: machine_activity_id
+            constraintName: machine_machine_activity_fk
+            onDelete: set null
+            deleteCascade: true

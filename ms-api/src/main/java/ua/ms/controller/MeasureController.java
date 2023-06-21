@@ -10,7 +10,7 @@ import ua.ms.entity.measure.Measure;
 import ua.ms.entity.measure.dto.MeasureDto;
 import ua.ms.entity.measure.dto.view.MeasureView;
 import ua.ms.service.MeasureService;
-import ua.ms.util.exception.MeasureValidationException;
+import ua.ms.util.exception.EntityValidationException;
 import ua.ms.util.mapper.Mapper;
 
 import java.util.List;
@@ -30,13 +30,13 @@ public class MeasureController {
 
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{id}")
+    @PostMapping()
     public MeasureDto create(@RequestBody @Valid MeasureDto measureDto,
                              BindingResult bindingResult) {
 
         if (bindingResult.hasErrors())
-            throw new MeasureValidationException(bindingResult.getAllErrors().toString());
-
+            throw new EntityValidationException(bindingResult);
+        System.out.println(measureDto);
         Measure createdMeasure = measureService.create(mapper.toEntity(measureDto));
         return mapper.toDto(createdMeasure);
     }

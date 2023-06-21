@@ -13,9 +13,7 @@ import ua.ms.entity.user.User;
 import ua.ms.entity.user.dto.UserDto;
 import ua.ms.entity.user.dto.view.UserView;
 import ua.ms.service.UserService;
-import ua.ms.util.exception.AccessException;
-import ua.ms.util.exception.UserNotFoundException;
-import ua.ms.util.exception.UserValidationException;
+import ua.ms.util.exception.*;
 import ua.ms.util.mapper.Mapper;
 
 import java.util.List;
@@ -39,8 +37,14 @@ public class UserController {
     @GetMapping("/{id}")
     public UserView find(@PathVariable long id) {
         Optional<UserView> byId = userService.findById(id, UserView.class);
-        if (byId.isEmpty()) throw new UserNotFoundException(format("User with id[%d] wasn't found", id));
+        if (byId.isEmpty()) throw new EntityNotFoundException(format("User with id[%d] wasn't found", id));
         return byId.get();
+    }
+
+    /** Endpoint for getting current authenticated {@link ua.ms.entity.user.User} from  Security context */
+    @GetMapping("/account")
+    public UserDto getCurrent(Authentication authentication) {
+        return mapper.toDto((User) authentication.getPrincipal());
     }
 
     @GetMapping("/all")
@@ -66,7 +70,7 @@ public class UserController {
     @PatchMapping("/{id}")
     public UserDto update(@PathVariable long id,
                           @RequestBody  @Valid UserDto userDto, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) throw new UserValidationException(bindingResult.getAllErrors().toString());
+        if (bindingResult.hasErrors()) throw new EntityValidationException(bindingResult);
         return mapper.toDto(userService.update(id, userDto));
     }
 }

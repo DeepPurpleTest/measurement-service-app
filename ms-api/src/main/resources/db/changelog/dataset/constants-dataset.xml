@@ -41,8 +41,26 @@
         <insert tableName="measure_system">
             <column name="id" value="AMPERE" />
         </insert>
+        <insert tableName="measure_system">
+            <column name="id" value="DECIBEL" />
+        </insert>
+        <insert tableName="measure_system">
+            <column name="id" value="PERCENT" />
+        </insert>
         <rollback>
             DELETE FROM measure_system;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="machine activity dataset" author="moksem">
+        <insert tableName="machine_activity">
+            <column name="id" value="ACTIVE"/>
+        </insert>
+        <insert tableName="machine_activity">
+            <column name="id" value="INACTIVE"/>
+        </insert>
+        <rollback>
+            DELETE FROM machine_activity;
         </rollback>
     </changeSet>
 

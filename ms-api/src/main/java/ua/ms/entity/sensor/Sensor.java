@@ -24,7 +24,7 @@ public class Sensor implements AbstractSensorIdentifiable {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "name")
     private String name;
@@ -43,12 +43,15 @@ public class Sensor implements AbstractSensorIdentifiable {
     @OneToMany(mappedBy = "sensor")
     private List<Measure> measures;
 
+    @Column(name = "critical_value")
+    private Double criticalValue;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Sensor sensor = (Sensor) o;
-        return id == sensor.id &&
+        return Objects.equals(id, sensor.id) &&
                 Objects.equals(name, sensor.name) &&
                 Objects.equals(machine, sensor.machine);
     }
