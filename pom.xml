@@ -25,6 +25,8 @@
     <modules>
         <module>ms-api</module>
         <module>e2e-tests</module>
+        <module>ms-consumer</module>
+        <module>journal-service</module>
     </modules>
 
     <name>root</name>

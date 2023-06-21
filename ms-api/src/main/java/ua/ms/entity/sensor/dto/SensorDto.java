@@ -18,7 +18,7 @@ import ua.ms.util.ApplicationConstants;
 public class SensorDto implements AbstractSensorIdentifiable {
 
     @Nullable
-    private long id;
+    private Long id;
 
     @Length(min = ApplicationConstants.Validation.MIN_NAME_LENGTH,
             max = ApplicationConstants.Validation.MAX_NAME_LENGTH,
@@ -29,4 +29,7 @@ public class SensorDto implements AbstractSensorIdentifiable {
     private MeasureSystem measureSystem;
 
     private Long machineId;
+
+    @Nullable
+    private Double criticalValue;
 }

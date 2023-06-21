@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.jackson.Jacksonized;
+import org.hibernate.Hibernate;
 import ua.ms.entity.sensor.Sensor;
 
 import java.time.LocalDateTime;
@@ -22,13 +23,13 @@ public class Measure implements AbstractMeasureIdentifiable{
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "measure_value")
     private double value;
 
     @JsonManagedReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sensor_id", referencedColumnName = "id")
     private Sensor sensor;
 
@@ -43,10 +44,27 @@ public class Measure implements AbstractMeasureIdentifiable{
 
         Measure measure = (Measure) o;
 
-        if (id != measure.id) return false;
+        if (!Objects.equals(id, measure.id)) return false;
         if (Double.compare(measure.value, value) != 0) return false;
         if (!Objects.equals(sensor, measure.sensor)) return false;
         return Objects.equals(createdAt, measure.createdAt);
+    }
+
+    /** checks if measure value greater than critical  */
+    public boolean isCriticalUnsafe() {
+        if (this.sensor.getCriticalValue() == null) {
+            return false;
+        }
+        return this.value > this.sensor.getCriticalValue();
+    }
+
+    /** checks if measure value greater than critical with prefetch of the second one */
+    public boolean isCriticalSafe() {
+        Hibernate.initialize(this.sensor);
+        if (this.sensor.getCriticalValue() == null) {
+            return false;
+        }
+        return this.value > this.sensor.getCriticalValue();
     }
 
     @Override

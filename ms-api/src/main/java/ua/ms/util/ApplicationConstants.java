@@ -32,12 +32,32 @@ public class ApplicationConstants {
         public static final int MAX_MACHINE_NAME_LENGTH = 20;
         public static final String MACHINE_NAME_MSG = "Machine name must be between 0 and " + MAX_MACHINE_NAME_LENGTH;
         public static final String MACHINE_MODEL_MSG = "Machine model must be between 0 and " + MAX_MACHINE_MODEL_LENGTH;
+        public static final String MACHINE_FACTORY_MSG = "Choose machine factory";
+
     }
 
     @UtilityClass
     public static final class Security {
         public static final String TOKEN_PREFIX = "Bearer ";
         public static final String TOKEN_HEADER_NAME = "Authorization";
-        public static final String JWT_TOKEN_RESPONSE_KEY = "jwt-token";
+        public static final String JWT_TOKEN_RESPONSE_KEY = "token";
+    }
+
+    @UtilityClass
+    public static final class Mail {
+        public static final String MESSAGE_TEMPLATE = """
+                [Warning] Current state of sensor[%s] is not stable, please check if everything is alright
+                
+                Machine model : %s
+                Machine name : %s
+                Sensor model : %s
+                last measured value: %.2f
+                critical value (configuration) : %.2f
+                
+                You can stop machine manually from our web-service
+                
+                ________________________________________________________________________________________________
+                measurement-service-app
+        """;
     }
 }
